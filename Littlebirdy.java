@@ -2,248 +2,195 @@ import java.awt.*;
 
 public class Littlebirdy
 {
-  public static void Load()
-  {
-     Font name = new Font("Game", Font.BOLD, 30); // create new font
-     StdDraw.picture(0.5,0.5,"MainMenu.png"); // picture was made in paint
-     StdDraw.show(10);// show image for 1000ms
-     StdAudio.play("mb_new.wav"); // play sound. see READ ME.txt (1)
-  }
-  
-  public static void GameOver(int score)
-  {
-    double rx = -0.5; // x position of bird
-    StdAudio.play("hit2.wav");// play sound. see README.txt (2)
-    StdDraw.setPenColor(StdDraw.RED);//change pen colour
-    StdDraw.text((rx-0.3) , 0.9, ""+score); // write score at indicated postion
-    StdDraw.text(0.0 , 0.0, "GAME OVER!"); // write text
-    StdDraw.show(20);//show for 20ms
-  }
-  
-  public static void fall(double vy, double ry, double gravity, double degrees, double gap, double gap1, double gap2, double vx, double vx1, double vx2, int score)
-  {
-    StdAudio.play("mb_sc.wav");// play sound. see README.txt (3)
-    while(ry>-1.1) // while not at bottom
-    {
-      double rx = -0.5;
-      degrees += -1; //tilt of bird
-      vy = vy - gravity;//velocity becomes negative
-      ry += vy;//falling of bird
-      
-      //draw background
-      StdDraw.setPenColor(StdDraw.WHITE);
-      StdDraw.filledSquare(0, 0, 1.2);
-                             
-      // draw pipes
-      StdDraw.setPenColor(StdDraw.BLACK); 
-      StdDraw.filledRectangle(vx , 0.0, 0.23, 1.5);
-      StdDraw.filledRectangle(vx1, 0.0, 0.23,1.5);    
-      StdDraw.filledRectangle(vx2, 0.0, 0.23,1.5);
-                 
-      //draw gap
-      StdDraw.setPenColor(StdDraw.WHITE);
-      StdDraw.filledSquare(vx, gap, 0.32);
-      StdDraw.filledSquare(vx1, gap1, 0.32);
-      StdDraw.filledSquare(vx2, gap2, 0.32);
-      
-      //draw bird. see README.txt (4)
-      StdDraw.picture(-0.5, ry, "birdy.png",degrees);
-      StdDraw.setPenColor(StdDraw.RED);
-      StdDraw.text((rx-0.3) , 0.9, ""+score); // write score at indicated postion
-      StdDraw.show(20);
-    }
-  }
+	private final static double MAX_RESOLUTION = 1;
 
-  public static void Fly()
-  { 
-    // set the scale of the coordinate system
-        double rx = 0.1, ry = 0.2;      // position
-        double vy = 0.0;                // velocity
-        double gravity = 0.0020;        // gravity
-        double jump = 0.030;            // jump
-        double radius = 0.055;          // radius
+	public static void Load()
+	{
+		StdDraw.setCanvasSize(1080, 1080);
+		StdDraw.picture(0.5,0.5,"MainMenu.png"); // picture was made in paint
+		StdAudio.play("mb_new.wav"); // play sound. see READ ME.txt (1)
+	}
 
-        //velocity of each individual pipe
-        double vx = 2.5;
-        double ax = -0.01;
-        double vx1 = 3.5;
-        double ax1= -0.01;
-        double vx2 = 4.5;
-        double ax2 = -0.01;
-        double degrees = 0;
-        double degchange = -1;
-        
-        //generate random positions for gap of each pipe
-        double gap = (Math.random()*(0.6-(-0.6))-0.6);
-        double gap1 = (Math.random()*(0.6-(-0.6))-0.6);
-        double gap2 = (Math.random()*(0.6-(-0.6))-0.6);
-        
-        int score = 0;
-        StdDraw.picture(rx, ry, "birdy.png",degrees);
-        // main loop
-        while (true)  { 
+	public static void GameOver(int score)
+	{
+		StdAudio.play("hit2.wav");// play sound. see README.txt (2)
+		StdDraw.setPenColor(StdDraw.RED);//change pen colour
+		StdDraw.text(MAX_RESOLUTION/2 , MAX_RESOLUTION/2.5, ""+score); // write score at indicated postion
+		StdDraw.text(MAX_RESOLUTION/2 , MAX_RESOLUTION/2, "GAME OVER!"); // write text
+	}
 
-         if (Math.abs(ry + vy)>  1.1 - radius)//while not at bottom of window
-         {
-            GameOver(score);//call gameover function
-            break;
-         }
-         
-         // set pillars to origional position
-         //*************************************************************************************************************
-         if(((vx + ax) < -1.5 - radius)) //pillar 2
-         {
-           vx = 1.5;
-           gap = (Math.random()*(0.6-(-0.6))-0.6);
-         }
-         
-         if(((vx1 + ax1) < -1.5- radius)) // pillar 2
-         {
-           vx1 = 1.5;
-           gap1 = (Math.random()*(0.6-(-0.6))-0.6);
-         }
-         
-         if(((vx2 + ax2) < (-1.5 - radius))) // pillar 3
-         {
-           vx2 = 1.5;
-           gap2 = (Math.random()*(0.6-(-0.6))-0.6);
-         }
-         //*************************************************************************************************************
-         //pillar hit detection
-         //*************************************************************************************************************        
-         if(((vx-0.36)<=rx)&&((vx-0.36)>=-0.51))  //detects whether bird & pillar are at  same x position
-         {
-          if((ry+0.05)>=(gap+0.32)||((ry-0.05)<=(gap-0.32))) 
-          {
-            fall(vy, ry, gravity*2, degrees, gap , gap1, gap2, vx , vx1, vx2, score); //fall function is called
-            GameOver(score);// GameOver function is called
-            break; //exit loop
-          }
-         }
-         
-         if(((vx-0.36)<= rx)&&((vx-0.36)<=-0.51)&&((vx+0.36)>= rx)) //detect hits when bird is inside piller
-         if((ry+0.05)>=(gap+0.26)||((ry-0.05)<=(gap-0.26))) 
-            {
-               fall(vy*0.3, ry, gravity*2, degrees, gap , gap1, gap2, vx , vx1, vx2, score); //fall function is called
-               GameOver(score);// GameOver function is called
-               break; //exit loop
-            }
+	public static void fall(Bird bird, double gap1, double gap2, double gap3, double positionPipe1, double positionPipe2, double positionPipe3, int score)
+	{
+		Pipe pipe1 = new Pipe();
+		Pipe pipe2 = new Pipe();
+		Pipe pipe3 = new Pipe();
+		
+		StdAudio.play("mb_sc.wav");// play sound. see README.txt (3)
+		while(bird.Y>0) // while not at bottom
+		{
+			double rx = -0.5;
+			bird.degrees += -1; //tilt of bird
+			bird.verticalVelocity -= bird.gravity;
+			bird.Y += bird.verticalVelocity;
+			
+			// draw Objects
+			StdDraw.picture(0.5, 0.5, "background.png");
+			StdDraw.picture(0.1, bird.Y, "birdy.png", bird.degrees);
 
-         if(((vx1-0.36)<=rx)&&((vx1-0.36)>=-0.51))  //detects whether bird & pillar are at  same x position
-         {
-          if((ry+0.05)>=(gap1+0.32)||((ry-0.05)<=(gap1-0.32))) 
-          {
-            fall(vy, ry, gravity, degrees, gap , gap1, gap2, vx , vx1, vx2, score);//fall function is called
-            GameOver(score);// GameOver function is called
-            break;//exit loop
-          }
-         }
-         
-         if(((vx1-0.36)<= rx)&&((vx1-0.36)<=-0.51)&&((vx1+0.36)>= rx))//detect hits when bird is inside piller
-         if((ry+0.05)>=(gap1+0.26)||((ry-0.05)<=(gap1-0.26))) 
-            {
-               fall(vy*0.3, ry, gravity*2, degrees, gap , gap1, gap2, vx , vx1, vx2, score); //fall function is called
-               GameOver(score);// GameOver function is called
-               break; //exit loop
-            }
-         
-         if(((vx2-0.36)<=rx)&&((vx2-0.36)>=-0.51))  //detects whether bird & pillar are at  same x position
-         {
-          if((ry+0.05)>=(gap2+0.32)||((ry-0.05)<=(gap2-0.32))) 
-          {
-            fall(vy, ry, gravity, degrees, gap , gap1, gap2, vx , vx1, vx2, score);//fall function is called
-            GameOver(score);// GameOver function is called
-            break;//exit loop
-          }
-         }
-         
-         if(((vx2-0.36)<= rx)&&((vx2-0.36)<=-0.51)&&((vx2+0.36)>= rx)) //detect hits when bird is inside piller
-         if((ry+0.05)>=(gap2+0.26)||((ry-0.05)<=(gap2-0.26))) 
-            {
-               fall(vy*0.3, ry, gravity*2, degrees, gap , gap1, gap2, vx , vx1, vx2, score); //fall function is called1
-               GameOver(score);// GameOver function is called
-               break; //exit loop
-            }
-         //*************************************************************************************************************       
-            // flap when spacebar is pressed
-            if(StdDraw.isKeyPressed(' '))
-            {
-              vy =  jump; // set velocity to 'jump'
-              degrees = 20; // rotation to 20 degrees
-            }
+			pipe1.drawPipe(positionPipe1 , 0.1, 0.15, gap1-0.1);
+			pipe1.drawPipe(positionPipe1 , 1, 0.15, gap1+0.1, 180);
+			
+			pipe2.drawPipe(positionPipe2 , 0.1, 0.15, gap2-0.1);
+			pipe2.drawPipe(positionPipe2 , 1, 0.15, gap2+0.1, 180);
+			
+			pipe3.drawPipe(positionPipe3 , 0.1, 0.15, gap3-0.1);
+			pipe3.drawPipe(positionPipe3 , 1, 0.15, gap3+0.1, 180);
+		
+			StdDraw.setPenColor(StdDraw.RED);
+			StdDraw.text((rx-0.3) , 0.9, ""+score);
+			StdDraw.show(20);
+		}
+	}
 
-            //bird movement
-            vy = vy - gravity;
-            ry += vy;
+	public static void Fly()
+	{ 
+//		double birdX = 0.1;
+//		double birdY = 0.5;
+//		double verticalVelocity = 0.0;
+//		double gravity = 0.0020;
+//		double jump = 0.030;  
+//		double birdRadius = 0.055;
+//		double degrees = 0;
+//		double degchange = -1;
+		Bird bird = new Bird();
+		
+		double positionPipe1 = 1.5;
+		double ax = -0.01;
+		double positionPipe2 = 2.5;
+		double ax1= -0.01;
+		double positionPipe3 = 3.5;
+		double ax2 = -0.01;
 
-            // give pipes a certain velocity
-            vx = vx + ax;
-            vx1 = vx1 + ax1;
-            vx2 = vx2 + ax2;
-            
-            //check if successfully passed through pipe
-            //*************************************************************************************************************
-            while((vx<=rx)&&(vx>=-0.51))
-            {
-              StdAudio.play("pp.wav"); // play sound. see README.txt (5)
-              score = score + 1;
-              break; 
-            }
+		//velocity of each individual pipe
+		Pipe pipe1 = new Pipe();
+		Pipe pipe2 = new Pipe();
+		Pipe pipe3 = new Pipe();
 
-            while((vx1<=rx)&&(vx1>=-0.51))
-            {
-              StdAudio.play("pp.wav"); // play sound. see README.txt (5)
-              score = score + 1;
-              break; 
-            }
-            
-            while((vx2<=rx)&&(vx2>=-0.51))
-            {
-              StdAudio.play("pp.wav"); // play sound. see README.txt (5)
-              score = score + 1;
-              break; 
-            }
-            //**********************************************************************************************************
+		Double gap1 = Math.random()*(0.65-0.3)+0.3;
+		Double gap2 = Math.random()*(0.65-0.3)+0.3;
+		Double gap3 = Math.random()*(0.65-0.3)+0.3;
 
-            degrees += degchange; // make bird rotate
+		int score = 0;
+		StdDraw.picture(bird.X, bird.Y , "birdy.png", bird.degrees);
+		// main loop
+		while (true)  {
+			//while not at bottom of window or at the top
+			if (bird.Y + bird.verticalVelocity < bird.radius || bird.Y + bird.verticalVelocity > 1-0.01)
+			{
+				fall(bird, gap1 , gap2, gap3, positionPipe1 , positionPipe2, positionPipe3, score);
+				GameOver(score);//call gameover function
+				break;
+			}
 
-            // clear the background
-            StdDraw.setPenColor(StdDraw.WHITE);
-            StdDraw.filledSquare(0, 0, 1.2);
+			// set pillars to origional position
+			//*************************************************************************************************************
+			if(((positionPipe1 + ax) < -1.5 - bird.radius)) //pillar 1
+			{
+				positionPipe1 = 1.5;
+				pipe1.passed = false;
+				gap1 = Math.random()*(0.65-0.3)+0.3;
+			}
 
-            // draw pipes
-            //**********************************************************************************************************
-            StdDraw.setPenColor(StdDraw.BLACK); 
-            StdDraw.filledRectangle(vx , 0.0, 0.23, 1.5);
-            StdDraw.filledRectangle(vx1, 0.0, 0.23,1.5);
-            StdDraw.filledRectangle(vx2, 0.0, 0.23,1.5);
-            //**********************************************************************************************************
+			if(((positionPipe2 + ax1) < -1.5- bird.radius)) // pillar 2
+			{
+				positionPipe2 = 1.5;
+				pipe2.passed = false;
+				gap2 = Math.random()*(0.65-0.3)+0.3;
+			}
 
-            //draw gap
-            //**********************************************************************************************************
-            StdDraw.setPenColor(StdDraw.WHITE);
-            StdDraw.filledSquare(vx, gap, 0.32);
-            StdDraw.filledSquare(vx1, gap1, 0.32);
-            StdDraw.filledSquare(vx2, gap2, 0.32);
-            //**********************************************************************************************************
+			if(((positionPipe3 + ax2) < (-1.5 - bird.radius))) // pillar 3
+			{
+				positionPipe3 = 1.5;
+				pipe3.passed = false;
+				gap3 = Math.random()*(0.65-0.3)+0.3;
+			}
+			//*************************************************************************************************************
+			// TODO: pillar hit detection
+			//*************************************************************************************************************        
+			//
+			//*************************************************************************************************************
+			
+			// flap when spacebar is pressed
+			if(StdDraw.isKeyPressed(' '))
+			{
+				bird.flap();
+			}
 
-            //draw bird
-            StdDraw.picture(rx, ry, "birdy.png",degrees);
+			//bird movement
+			bird.verticalVelocity -= bird.gravity;
+			bird.Y += bird.verticalVelocity;
 
-            //show score 
-            StdDraw.setPenColor(StdDraw.RED);
-            StdDraw.text((rx-0.3) , 0.9, ""+score);
-            StdDraw.show(20);  
-        } 
-    }
-  
-   public static void main(String[] args)//main function
-   {
-     Load(); // show loading screen
-     while(true) // call continiously
-     {
-      if(StdDraw.isKeyPressed(' ')) // checks if user wants to restart
-      Fly(); // call fly function
-     }
-   }
+			// give pipes a certain velocity
+			positionPipe1 = positionPipe1 + ax;
+			positionPipe2 = positionPipe2 + ax1;
+			positionPipe3 = positionPipe3 + ax2;
+
+			//check if successfully passed through pipe
+			//*************************************************************************************************************
+			if (positionPipe1 < bird.X && positionPipe1 > bird.X-0.3 && pipe1.passed == false) {
+				StdAudio.play("pp.wav"); // play sound. see README.txt (5)
+				pipe1.passed = true;
+				
+			}
+
+			if (positionPipe2 < bird.X && positionPipe2 > bird.X-0.3 && pipe2.passed == false) {
+				StdAudio.play("pp.wav"); // play sound. see README.txt (5)
+				pipe2.passed = true;
+				
+			}
+
+			if (positionPipe3 < bird.X && positionPipe3 > bird.X-0.3 && pipe3.passed == false) {
+				StdAudio.play("pp.wav"); // play sound. see README.txt (5)
+				pipe1.passed = true;
+				
+			}
+			//**********************************************************************************************************
+
+			bird.degrees += bird.degchange; // make bird rotate
+
+			// clear the background
+			StdDraw.picture(0.5, 0.5, "background.png");
+
+			// draw pipes
+			//**********************************************************************************************************
+			pipe1.drawPipe(positionPipe1 , 0.1, 0.15, gap1-0.1);
+			pipe1.drawPipe(positionPipe1 , 1, 0.15, gap1+0.1, 180);
+			StdDraw.filledSquare(positionPipe1, gap1, 0.02);
+			
+			pipe2.drawPipe(positionPipe2 , 0.1, 0.15, gap2-0.1);
+			pipe2.drawPipe(positionPipe2 , 1, 0.15, gap2+0.1, 180);
+			StdDraw.filledSquare(positionPipe2, gap2, 0.02);
+			
+			pipe3.drawPipe(positionPipe3 , 0.1, 0.15, gap3-0.1);
+			pipe3.drawPipe(positionPipe3 , 1, 0.15, gap3+0.1, 180);
+			StdDraw.filledSquare(positionPipe3, gap3, 0.02);
+			//**********************************************************************************************************
+			//draw bird
+			StdDraw.picture(bird.X, bird.Y, "birdy.png", bird.degrees);
+			//**********************************************************************************************************
+			//show score
+			//TODO: Create new font here
+			StdDraw.setPenColor(StdDraw.RED);
+			StdDraw.text(0.9, 0.9, ""+score);
+			StdDraw.show(20);
+		} 
+	}
+
+	public static void main(String[] args) {
+		Load();
+		while(true) {
+			if(StdDraw.isKeyPressed(' '))
+				Fly();
+		}
+	}
 } 
