@@ -18,9 +18,9 @@ public class Pipe {
 
 	public void drawPipe() {
 		if (rotation == 0) {
-			StdDraw.picture(x , y, "pipe3.png", width, height);
+			StdDraw.picture(x , y, "resources/pictures/pipe3.png", width, height);
 		} else {
-			StdDraw.picture(x , 1-y, "pipe3.png", width, height, 180);
+			StdDraw.picture(x , 1-y, "resources/pictures/pipe3.png", width, height, 180);
 		}
 	}
 	

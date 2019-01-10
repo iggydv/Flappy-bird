@@ -20,14 +20,14 @@ public class Littlebirdy
 	public static void Load() {	
 		StdDraw.setCanvasSize(1920, 1080);
 		StdDraw.setScale(0,1);
-		StdDraw.picture(0.5,0.5,"MainMenu.png"); // picture was made in paint
-		StdAudio.play("startup.wav"); // play sound. see READ ME.txt (1)
+		StdDraw.picture(0.5,0.5,"resources/pictures/MainMenu.png"); // picture was made in paint
+		StdAudio.play("resources/sounds/startup.wav"); // play sound. see READ ME.txt (1)
 	}
 
 	public static void GameOver(int score) {
 		StdDraw.pause(100);
-		StdAudio.play("hit-ground.wav");// play sound. see README.txt (2)
-		StdDraw.picture(0.5, 0.5, "background.png");
+		StdAudio.play("resources/sounds/hit-ground.wav");// play sound. see README.txt (2)
+		StdDraw.picture(0.5, 0.5, "resources/pictures/background.png");
 		StdDraw.setPenColor(StdDraw.RED);//change pen colour
 		StdDraw.text(MAX_RESOLUTION/2 , MAX_RESOLUTION/2.5, ""+score); // write score at indicated postion
 		StdDraw.text(MAX_RESOLUTION/2 , MAX_RESOLUTION/2, "GAME OVER!"); // write text
@@ -35,9 +35,9 @@ public class Littlebirdy
 	}
 
 	public static void reset() {
-		gap1 = Math.random()*(0.8-0.4)+0.4;
-		gap2 = Math.random()*(0.8-0.4)+0.4;
-		gap3 = Math.random()*(0.8-0.4)+0.4;
+		gap1 = generateGap();
+		gap2 = generateGap();
+		gap3 = generateGap();
 		pipe1 = new Pipe(1, (gap1)/2, (gap1+0.1)*0.15, gap1);
 		pipe2 = new Pipe(1.5 , (gap2)/2, (gap2+0.1)*0.15, gap2);
 		pipe3 = new Pipe(2.0 , (gap3)/2, (gap3+0.1)*0.15, gap3);
@@ -45,8 +45,12 @@ public class Littlebirdy
 		score = 0;
 	}
 
+	public static double generateGap() {
+		return Math.random()*(0.8-0.4)+0.4;
+	}
+
 	public static void fall() {
-		StdAudio.play("hit-top-or-pillar.wav");
+		StdAudio.play("resources/sounds/hit-top-or-pillar.wav");
 		
 		while( bird.y > 0) {
 			bird.degrees += -1; //tilt of bird
@@ -54,8 +58,8 @@ public class Littlebirdy
 			bird.y += bird.verticalVelocity;
 
 			// draw Objects
-			StdDraw.picture(0.5, 0.5, "background.png");
-			StdDraw.picture(0.1, bird.y, "birdy.png", bird.degrees);
+			StdDraw.picture(0.5, 0.5, "resources/pictures/background.png");
+			StdDraw.picture(0.1, bird.y, "resources/pictures/birdy.png", bird.degrees);
 			pipe1.drawPipe();
 			pipe2.drawPipe();
 			pipe3.drawPipe();
@@ -72,7 +76,7 @@ public class Littlebirdy
 		while (true) {
 			// Clear the background
 			//**********************************************************************************************************
-			StdDraw.picture(0.5, 0.5, "background.png");
+			StdDraw.picture(0.5, 0.5, "resources/pictures/background.png");
 
 			// Draw pipes
 			//**********************************************************************************************************
@@ -82,7 +86,7 @@ public class Littlebirdy
 
 			// Draw Bird
 			//**********************************************************************************************************
-			StdDraw.picture(bird.x, bird.y, "birdy.png", bird.degrees);
+			StdDraw.picture(bird.x, bird.y, "resources/pictures/birdy.png", bird.degrees);
 
 			StdDraw.setPenColor(StdDraw.RED);
 			StdDraw.text(0.9, 0.9, ""+score);
@@ -162,19 +166,19 @@ public class Littlebirdy
 
 	public static void checkPillerPass() {
 		if (pipe1.x < bird.x && pipe1.passed == false) {
-			StdAudio.play("score.wav"); // play sound. see README.txt (5)
+			StdAudio.play("resources/sounds/score.wav"); // play sound. see README.txt (5)
 			pipe1.passed = true;
 			score++;
 		}
 
 		if (pipe2.x < bird.x && pipe2.passed == false) {
-			StdAudio.play("score.wav");
+			StdAudio.play("resources/sounds/score.wav");
 			pipe2.passed = true;
 			score++;
 		}
 
 		if (pipe3.x < bird.x && pipe3.passed == false) {
-			StdAudio.play("score.wav"); // play sound. see README.txt (5)
+			StdAudio.play("resources/sounds/score.wav"); // play sound. see README.txt (5)
 			pipe3.passed = true;
 			score++;
 		}

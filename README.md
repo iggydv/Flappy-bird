@@ -9,13 +9,9 @@
 # Little Birdy, it's like Flappy Bird, but in permanent beta
 This is a small pet project, written entirely in java, using th StdDraw library. This project is used to practice newly acquired concepts on a regular basis.
 
-# Sound effects
-(1) The mushroom kingdom - http://www.themushroomkingdom.net/
-
-(2) SoundBible.com - http://soundbible.com/tags-hitting.html
-
-(3) The mushroom kingdom - http://www.themushroomkingdom.net/
-
-(4) Created image similar to flappy bird - Bird, in 'piq', pixel image creator - http://piq.codeus.net/
-
-(5) The mushroom kingdom - http://www.themushroomkingdom.net/
+# Sound & Visual effects
+* The mushroom kingdom - http://www.themushroomkingdom.net/
+* SoundBible.com - http://soundbible.com/tags-hitting.html
+* The mushroom kingdom - http://www.themushroomkingdom.net/
+* Created Bird image - http://piq.codeus.net/
+* The mushroom kingdom - http://www.themushroomkingdom.net/
