@@ -1,9 +1,9 @@
 
 <p align="center">
-    <img src="https://github.com/iggydv/Flappy-bird/blob/master/Title.png">
+    <img src="https://github.com/iggydv/Flappy-bird/blob/master/resources/pictures/Title.png">
 </p>
 <p align="center">
-    <img width="150" height="150" src="https://github.com/iggydv/Flappy-bird/blob/master/birdy.png">
+    <img width="150" height="150" src="https://github.com/iggydv/Flappy-bird/blob/master/resources/pictures/birdy.png">
 </p>
  
 # Little Birdy, it's like Flappy Bird, but in permanent beta
